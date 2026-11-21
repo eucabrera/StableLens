@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>El Mapa del Ecosistema Stablecoin — StableLens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#BF2A17;--red-l:#FDECEA;--red-d:#8C1A0C;
+  --cream:#FDFAF5;--carbon:#1C1917;
+  --forest:#1B4332;--forest-l:#D1FAE5;
+  --sand:#EDE8DE;--sand-d:#D6CEBC;
+  --muted:#6B7280;--muted-l:#9CA3AF;
+  --f:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;
+  --m:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f);background:var(--cream);color:var(--carbon);-webkit-font-smoothing:antialiased;line-height:1.6;}
+
+/* ── COVER ── */
+.cover{
+  min-height:100vh;background:var(--carbon);
+  display:flex;flex-direction:column;
+  padding:0;position:relative;overflow:hidden;
+}
+.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(237,232,222,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(237,232,222,.04) 1px,transparent 1px);background-size:60px 60px;}
+.cover-redline{position:absolute;top:0;left:0;right:0;height:4px;background:var(--red);}
+.cover-inner{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;padding:56px 72px;}
+.cover-logo{display:flex;align-items:center;gap:9px;margin-bottom:auto;}
+.c-icon{width:28px;height:28px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;}
+.c-s{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.c-text{font-size:17px;font-weight:600;color:#fff;letter-spacing:-.4px;}
+.cover-content{padding:80px 0 60px;}
+.cover-tag{font-family:var(--m);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.cover-tag::before{content:'';width:28px;height:2px;background:var(--red);}
+.cover-title{font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.02;letter-spacing:-2.5px;color:#fff;margin-bottom:16px;}
+.cover-title em{color:var(--red);font-style:normal;}
+.cover-sub{font-size:18px;font-weight:400;color:rgba(255,255,255,.5);max-width:520px;line-height:1.65;margin-bottom:48px;}
+.cover-meta{display:flex;align-items:center;gap:32px;}
+.cover-meta-item{font-family:var(--m);font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.5px;}
+.cover-meta-val{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);margin-top:3px;}
+.cover-footer{border-top:1px solid rgba(255,255,255,.07);padding:20px 0 0;display:flex;align-items:center;justify-content:space-between;}
+.cover-footer-note{font-family:var(--m);font-size:11px;color:rgba(255,255,255,.2);}
+.cover-cta{background:var(--red);color:#fff;font-family:var(--f);font-size:13px;font-weight:500;padding:10px 22px;border-radius:5px;border:none;cursor:pointer;letter-spacing:-.1px;text-decoration:none;display:inline-block;}
+
+/* ── LAYOUT ── */
+.doc{max-width:860px;margin:0 auto;padding:72px 48px;}
+
+/* ── INTRO ── */
+.intro{border-left:3px solid var(--red);padding:24px 28px;background:#fff;border-radius:0 8px 8px 0;margin-bottom:64px;}
+.intro-label{font-family:var(--m);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.intro-text{font-size:16px;line-height:1.7;color:var(--carbon);}
+.intro-text strong{font-weight:600;}
+
+/* ── SECTION HEADERS ── */
+.sec{margin-bottom:56px;}
+.sec-num{font-family:var(--m);font-size:11px;color:var(--red);letter-spacing:1px;margin-bottom:8px;}
+.sec-title{font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;line-height:1.1;}
+.sec-lead{font-size:16px;color:var(--muted);line-height:1.65;margin-bottom:28px;max-width:640px;}
+.divider{width:100%;height:1px;background:var(--sand);margin:56px 0;}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;}
+.stat-card{background:#fff;border:1px solid var(--sand);border-radius:8px;padding:20px;border-top:2px solid var(--red);}
+.stat-val{font-family:var(--m);font-size:28px;font-weight:500;color:var(--carbon);margin-bottom:4px;}
+.stat-val em{color:var(--red);font-style:normal;}
+.stat-label{font-size:12px;color:var(--muted);line-height:1.4;}
+.stat-change{font-family:var(--m);font-size:11px;margin-top:6px;}
+.up{color:var(--forest);}.dn{color:var(--red);}
+
+/* ── CATEGORY BLOCKS ── */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.cat{background:#fff;border:1px solid var(--sand);border-radius:10px;padding:22px 24px;}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cat-icon{width:32px;height:32px;border-radius:6px;background:var(--red-l);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cat-icon svg{width:16px;height:16px;color:var(--red);}
+.cat-name{font-size:15px;font-weight:600;letter-spacing:-.3px;}
+.cat-count{font-family:var(--m);font-size:10px;color:var(--muted);margin-top:1px;}
+.cat-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.cat-examples{display:flex;flex-wrap:wrap;gap:5px;}
+.ex-tag{font-family:var(--m);font-size:10px;background:var(--cream);border:1px solid var(--sand);color:var(--carbon);padding:3px 9px;border-radius:3px;}
+.ex-tag.red{background:var(--red-l);border-color:rgba(191,42,23,.2);color:var(--red-d);}
+
+/* ── FULL WIDTH CAT ── */
+.cat.full{grid-column:1/-1;}
+
+/* ── MECHANISM TABLE ── */
+.mech-table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:13px;}
+.mech-table th{text-align:left;font-family:var(--m);font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:2px solid var(--sand);background:var(--cream);}
+.mech-table td{padding:12px 14px;border-bottom:1px solid var(--sand);vertical-align:top;line-height:1.5;}
+.mech-table tr:last-child td{border-bottom:none;}
+.mech-table tr:hover td{background:#fafaf8;}
+.m-type{font-weight:600;font-size:13px;}
+.m-badge{display:inline-block;font-family:var(--m);font-size:9px;padding:2px 7px;border-radius:2px;margin-top:4px;}
+.mb-green{background:var(--forest-l);color:var(--forest);}
+.mb-amber{background:#FEF3C7;color:#92400E;}
+.mb-red{background:var(--red-l);color:var(--red-d);}
+
+/* ── REGULATION ── */
+.reg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.reg-card{background:#fff;border:1px solid var(--sand);border-radius:8px;padding:16px;}
+.reg-country{font-size:13px;font-weight:600;letter-spacing:-.2px;margin-bottom:4px;}
+.reg-law{font-family:var(--m);font-size:10px;color:var(--red);margin-bottom:6px;}
+.reg-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;}
+.dot-green{width:6px;height:6px;border-radius:50%;background:var(--forest);display:inline-block;}
+.dot-amber{width:6px;height:6px;border-radius:50%;background:#F59E0B;display:inline-block;}
+.dot-gray{width:6px;height:6px;border-radius:50%;background:#9CA3AF;display:inline-block;}
+.reg-note{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4;}
+
+/* ── RISK TABLE ── */
+.risk-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--sand);}
+.risk-row:last-child{border-bottom:none;}
+.risk-num{font-family:var(--m);font-size:11px;color:var(--muted);width:20px;flex-shrink:0;}
+.risk-name{font-size:14px;font-weight:500;flex:1;letter-spacing:-.2px;}
+.risk-bar-wrap{width:120px;height:6px;background:var(--sand);border-radius:99px;overflow:hidden;flex-shrink:0;}
+.risk-bar{height:100%;border-radius:99px;}
+.risk-label{font-family:var(--m);font-size:10px;width:50px;text-align:right;flex-shrink:0;}
+
+/* ── CALLOUT ── */
+.callout{background:var(--carbon);border-radius:10px;padding:28px 32px;margin:32px 0;position:relative;overflow:hidden;}
+.callout::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
+.callout-label{font-family:var(--m);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;}
+.callout-text{font-size:16px;font-weight:500;color:#fff;line-height:1.6;letter-spacing:-.2px;}
+.callout-text em{color:var(--red);font-style:normal;}
+
+/* ── CTA FINAL ── */
+.cta-section{background:var(--red);border-radius:12px;padding:40px 48px;text-align:center;margin-top:64px;}
+.cta-title{font-size:28px;font-weight:700;color:#fff;letter-spacing:-1px;margin-bottom:8px;}
+.cta-sub{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:28px;line-height:1.6;}
+.cta-form{display:flex;gap:8px;max-width:420px;margin:0 auto 12px;}
+.cta-input{flex:1;border:none;outline:none;font-family:var(--f);font-size:14px;padding:12px 16px;border-radius:6px;background:rgba(255,255,255,.15);color:#fff;}
+.cta-input::placeholder{color:rgba(255,255,255,.5);}
+.cta-btn{background:#fff;color:var(--red);font-family:var(--f);font-size:13px;font-weight:600;padding:12px 22px;border-radius:6px;border:none;cursor:pointer;white-space:nowrap;letter-spacing:-.1px;}
+.cta-note{font-family:var(--m);font-size:11px;color:rgba(255,255,255,.4);}
+
+/* ── FOOTER ── */
+.doc-footer{border-top:1px solid var(--sand);padding:24px 0;display:flex;align-items:center;justify-content:space-between;margin-top:48px;}
+.df-logo{display:flex;align-items:center;gap:7px;}
+.df-icon{width:20px;height:20px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;}
+.df-s{font-size:10px;font-weight:700;color:#fff;}
+.df-text{font-size:14px;font-weight:600;letter-spacing:-.3px;}
+.df-note{font-family:var(--m);font-size:11px;color:var(--muted);}
+
+@media(max-width:680px){
+  .doc{padding:40px 24px;}
+  .stat-row,.cat-grid,.reg-grid{grid-template-columns:1fr;}
+  .cat.full{grid-column:auto;}
+  .cta-form{flex-direction:column;}
+  .cover-inner{padding:36px 28px;}
+  .cover-title{font-size:36px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-redline"></div>
+  <div class="cover-inner">
+    <div class="cover-logo">
+      <div class="c-icon"><span class="c-s">S</span></div>
+      <span class="c-text">StableLens</span>
+    </div>
+    <div class="cover-content">
+      <div class="cover-tag">Light Paper · Edición 2026</div>
+      <div class="cover-title">El mapa del<br>ecosistema<br><em>stablecoin.</em></div>
+      <p class="cover-sub">Quién es quién en el mercado de $320B que está redefiniendo el dinero global — emisores, protocolos, auditores, reguladores y más.</p>
+      <div class="cover-meta">
+        <div class="cover-meta-item">PUBLICADO POR<div class="cover-meta-val">StableLens</div></div>
+        <div class="cover-meta-item">EDICIÓN<div class="cover-meta-val">Mayo 2026</div></div>
+        <div class="cover-meta-item">PÁGINAS<div class="cover-meta-val">12 min de lectura</div></div>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <span class="cover-footer-note">stablelens.io · © 2026 StableLens. Todos los derechos reservados.</span>
+      <a href="#waitlist" class="cover-cta">Acceder a la plataforma →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTENIDO ══ -->
+<div class="doc">
+
+  <!-- INTRODUCCIÓN -->
+  <div class="intro">
+    <div class="intro-label">Por qué existe este documento</div>
+    <p class="intro-text">El mercado de stablecoins ha crecido hasta los <strong>$320B en activos</strong> con más de 214 tokens activos en más de 350 blockchains. Sin embargo, el ecosistema sigue siendo opaco para la mayoría: los datos están fragmentados, los actores son difíciles de clasificar y la regulación avanza a velocidades distintas en cada jurisdicción.<br><br>Este light paper es el primer producto de <strong>StableLens</strong> — una plataforma de inteligencia dedicada exclusivamente al ecosistema stablecoin. Aquí mapeamos los principales actores, mecanismos y dinámicas regulatorias para que puedas navegar el mercado con claridad.</p>
+  </div>
+
+  <!-- SECCIÓN 1: EL MERCADO -->
+  <div class="sec">
+    <div class="sec-num">01 · El mercado en cifras</div>
+    <h2 class="sec-title">Un mercado de $320B<br>en constante expansión</h2>
+    <p class="sec-lead">Las stablecoins han pasado de ser una herramienta auxiliar del trading crypto a convertirse en infraestructura financiera global para pagos, remesas y DeFi.</p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-val"><em>$320</em>B</div>
+        <div class="stat-label">Market cap total del ecosistema stablecoin</div>
+        <div class="stat-change up">↑ 6.5% en los últimos 30 días</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val"><em>214</em></div>
+        <div class="stat-label">Stablecoins activas rastreadas en múltiples chains</div>
+        <div class="stat-change up">↑ 6 nuevas en el último mes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val"><em>350+</em></div>
+        <div class="stat-label">Blockchains con al menos una stablecoin activa</div>
+        <div class="stat-change up">↑ Tron y Solana, crecimiento máximo</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-val"><em>59%</em></div>
+        <div class="stat-label">Dominancia de USDT (Tether) sobre el mercado total</div>
+        <div class="stat-change">↔ Estable vs 2025</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val"><em>$3T+</em></div>
+        <div class="stat-label">Volumen mensual de transacciones en stablecoins (2026)</div>
+        <div class="stat-change up">↑ Supera a Visa en días pico</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val"><em>4</em></div>
+        <div class="stat-label">Grandes marcos regulatorios activos (MiCA, GENIUS, MAS, FSA)</div>
+        <div class="stat-change up">↑ 2 nuevos en 2025–26</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Dato clave · StableLens Research</div>
+      <div class="callout-text">Por primera vez en la historia, las stablecoins superaron en volumen diario de transacciones a las redes de pago tradicionales en Q1 2026. <em>No son un experimento — son infraestructura.</em></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 2: MECANISMOS -->
+  <div class="sec">
+    <div class="sec-num">02 · Mecanismos</div>
+    <h2 class="sec-title">Cómo funcionan:<br>los 4 mecanismos</h2>
+    <p class="sec-lead">No todas las stablecoins funcionan igual. El mecanismo de estabilización determina el riesgo, la descentralización y la resistencia a shocks de mercado.</p>
+
+    <table class="mech-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Cómo mantiene el peg</th>
+          <th>Ejemplos</th>
+          <th>Riesgo principal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="m-type">Fiat-backed</div><div class="m-badge mb-green">Bajo riesgo</div></td>
+          <td>Reservas 1:1 en USD, EUR u otras monedas fiat en cuentas bancarias auditadas</td>
+          <td><span class="ex-tag">USDT</span> <span class="ex-tag">USDC</span> <span class="ex-tag">EURC</span> <span class="ex-tag">FDUSD</span></td>
+          <td>Riesgo de contraparte bancaria y transparencia de auditorías</td>
+        </tr>
+        <tr>
+          <td><div class="m-type">Crypto-backed</div><div class="m-badge mb-amber">Riesgo medio</div></td>
+          <td>Sobrecolateralización con activos crypto (ETH, BTC). Ratio mínimo 150%</td>
+          <td><span class="ex-tag">DAI</span> <span class="ex-tag">LUSD</span> <span class="ex-tag">MIM</span> <span class="ex-tag">crvUSD</span></td>
+          <td>Liquidaciones en cascada durante bear markets extremos</td>
+        </tr>
+        <tr>
+          <td><div class="m-type">Commodity-backed</div><div class="m-badge mb-amber">Riesgo medio</div></td>
+          <td>Respaldadas por activos físicos (oro, petróleo) con custodia verificable</td>
+          <td><span class="ex-tag">PAXG</span> <span class="ex-tag">XAUT</span> <span class="ex-tag">DGLD</span></td>
+          <td>Liquidez limitada y complejidad logística de auditoría física</td>
+        </tr>
+        <tr>
+          <td><div class="m-type">Algorítmica</div><div class="m-badge mb-red">Riesgo alto</div></td>
+          <td>Arbitraje automático entre el token stable y un token hermano volátil</td>
+          <td><span class="ex-tag red">UST ✗</span> <span class="ex-tag">FRAX</span> <span class="ex-tag">USDD</span></td>
+          <td>Death spiral: colapso en espiral si pierde la confianza del mercado</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 3: EL MAPA -->
+  <div class="sec">
+    <div class="sec-num">03 · El ecosistema</div>
+    <h2 class="sec-title">Quién es quién:<br>7 categorías de actores</h2>
+    <p class="sec-lead">El ecosistema stablecoin no son solo los tokens — es una cadena de valor compleja con al menos 7 tipos de actores interdependientes.</p>
+
+    <div class="cat-grid">
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="1" y1="6" x2="15" y2="6" stroke="currentColor" stroke-width="1.3"/></svg>
+          </div>
+          <div><div class="cat-name">Emisores</div><div class="cat-count">~30 actores principales</div></div>
+        </div>
+        <p class="cat-desc">Las entidades que crean y gestionan las stablecoins. Van desde corporaciones privadas a protocolos descentralizados. Son el corazón del ecosistema y los más regulados.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">Tether (USDT)</span>
+          <span class="ex-tag">Circle (USDC)</span>
+          <span class="ex-tag">MakerDAO (DAI)</span>
+          <span class="ex-tag">PayPal (PYUSD)</span>
+          <span class="ex-tag">First Digital (FDUSD)</span>
+          <span class="ex-tag">Agora (AUSD)</span>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="cat-name">Protocolos DeFi</div><div class="cat-count">+500 protocolos activos</div></div>
+        </div>
+        <p class="cat-desc">Plataformas de finanzas descentralizadas que usan stablecoins como activo principal para préstamos, liquidez y generación de yield. Son los mayores tenedores institucionales.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">Aave</span>
+          <span class="ex-tag">Compound</span>
+          <span class="ex-tag">Curve Finance</span>
+          <span class="ex-tag">MorphoBlue</span>
+          <span class="ex-tag">Spark Protocol</span>
+          <span class="ex-tag">Uniswap</span>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 8.5L7.5 10.5L11 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="cat-name">Auditores y custodios</div><div class="cat-count">~15 firmas relevantes</div></div>
+        </div>
+        <p class="cat-desc">Entidades que verifican las reservas de los emisores fiat-backed y custodian los activos. La calidad de la auditoría es el factor de confianza más crítico del sector.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">BDO</span>
+          <span class="ex-tag">Grant Thornton</span>
+          <span class="ex-tag">Deloitte</span>
+          <span class="ex-tag">BNY Mellon</span>
+          <span class="ex-tag">Coinbase Custody</span>
+          <span class="ex-tag">BitGo</span>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 13V7L8 3L13 7V13H10V10H6V13H3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="cat-name">Infraestructura</div><div class="cat-count">Blockchains y bridges</div></div>
+        </div>
+        <p class="cat-desc">Las redes sobre las que corren las stablecoins y los protocolos que permiten moverlas entre cadenas. La fragmentación cross-chain es uno de los principales retos del sector.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">Ethereum</span>
+          <span class="ex-tag">Tron</span>
+          <span class="ex-tag">Solana</span>
+          <span class="ex-tag">CCTP (Circle)</span>
+          <span class="ex-tag">LayerZero</span>
+          <span class="ex-tag">Wormhole</span>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+          </div>
+          <div><div class="cat-name">Exchanges y on/off ramps</div><div class="cat-count">+100 plataformas</div></div>
+        </div>
+        <p class="cat-desc">Plataformas centralizadas y descentralizadas donde se intercambian stablecoins por otras monedas. Son la puerta de entrada y salida del ecosistema para usuarios retail e instituciones.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">Binance</span>
+          <span class="ex-tag">Coinbase</span>
+          <span class="ex-tag">Kraken</span>
+          <span class="ex-tag">MoonPay</span>
+          <span class="ex-tag">Transak</span>
+          <span class="ex-tag">Mercuryo</span>
+        </div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 12L2 6L5.5 6L5.5 12M6.5 12L6.5 4L10 4L10 12M11 12L11 8L14 8L14 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="cat-name">Datos y analytics</div><div class="cat-count">Fragmentados, sin líder claro</div></div>
+        </div>
+        <p class="cat-desc">Plataformas que agregan y analizan datos del ecosistema stablecoin. Actualmente fragmentadas: ninguna cubre datos + regulación + directorio + research en un solo lugar.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">DeFiLlama</span>
+          <span class="ex-tag">Messari</span>
+          <span class="ex-tag">Kaiko</span>
+          <span class="ex-tag">Nansen</span>
+          <span class="ex-tag red">StableLens ←</span>
+        </div>
+      </div>
+
+      <div class="cat full">
+        <div class="cat-header">
+          <div class="cat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="5" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="5" y1="8.5" x2="11" y2="8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".6"/><line x1="5" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".4"/></svg>
+          </div>
+          <div><div class="cat-name">Reguladores y organismos</div><div class="cat-count">30+ jurisdicciones con regulación activa o en desarrollo</div></div>
+        </div>
+        <p class="cat-desc">La regulación es el factor más disruptivo del ecosistema en 2025–2026. MiCA en la UE, el GENIUS Act en EE.UU., MAS en Singapur y FSA en Japón están redefiniendo quién puede emitir stablecoins y bajo qué condiciones.</p>
+        <div class="cat-examples">
+          <span class="ex-tag">BCE / EBA (EU)</span>
+          <span class="ex-tag">SEC / FinCEN (EEUU)</span>
+          <span class="ex-tag">MAS (Singapur)</span>
+          <span class="ex-tag">FSA (Japón)</span>
+          <span class="ex-tag">FCA (UK)</span>
+          <span class="ex-tag">CBUAE (Dubai)</span>
+          <span class="ex-tag">SFC (Hong Kong)</span>
+          <span class="ex-tag">BCRA (Argentina)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 4: REGULACIÓN -->
+  <div class="sec">
+    <div class="sec-num">04 · Regulación global</div>
+    <h2 class="sec-title">El tablero regulatorio<br>en 2026</h2>
+    <p class="sec-lead">La regulación stablecoin ha pasado de ser un debate académico a una realidad operativa. Aquí el estado actual por región.</p>
+
+    <div class="reg-grid">
+      <div class="reg-card">
+        <div class="reg-country">Unión Europea</div>
+        <div class="reg-law">MiCA — Markets in Crypto Assets</div>
+        <div class="reg-status"><span class="dot-green"></span> En vigor (jun. 2024)</div>
+        <p class="reg-note">Los emisores deben obtener licencia de entidad de dinero electrónico. Límites de transacción para stables no-EUR.</p>
+      </div>
+      <div class="reg-card">
+        <div class="reg-country">Estados Unidos</div>
+        <div class="reg-law">GENIUS Act</div>
+        <div class="reg-status"><span class="dot-amber"></span> En proceso legislativo</div>
+        <p class="reg-note">Propone regulación federal de stablecoins de pago. Requiere reservas 1:1 y auditorías mensuales.</p>
+      </div>
+      <div class="reg-card">
+        <div class="reg-country">Reino Unido</div>
+        <div class="reg-law">FCA Stablecoin Regime</div>
+        <div class="reg-status"><span class="dot-amber"></span> Implementación 2025</div>
+        <p class="reg-note">Régimen específico para stablecoins de pago. Sandbox activo para pruebas regulatorias.</p>
+      </div>
+      <div class="reg-card">
+        <div class="reg-country">Singapur</div>
+        <div class="reg-law">MAS Stablecoin Framework</div>
+        <div class="reg-status"><span class="dot-green"></span> Activo desde ago. 2023</div>
+        <p class="reg-note">Marco específico para single-currency stablecoins. Referente en Asia para otras jurisdicciones.</p>
+      </div>
+      <div class="reg-card">
+        <div class="reg-country">Japón</div>
+        <div class="reg-law">FIEA Amendment</div>
+        <div class="reg-status"><span class="dot-green"></span> En vigor (jun. 2023)</div>
+        <p class="reg-note">Solo bancos, compañías de dinero electrónico y trust companies pueden emitir stablecoins.</p>
+      </div>
+      <div class="reg-card">
+        <div class="reg-country">Dubai (DIFC)</div>
+        <div class="reg-law">VARA Digital Asset Law</div>
+        <div class="reg-status"><span class="dot-green"></span> Activo desde 2023</div>
+        <p class="reg-note">Marco regulatorio proactivo. Dubai se posiciona como hub de emisores en Oriente Medio.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 5: RIESGOS -->
+  <div class="sec">
+    <div class="sec-num">05 · Riesgos del ecosistema</div>
+    <h2 class="sec-title">Los 5 riesgos que<br>todo analista debe conocer</h2>
+    <p class="sec-lead">El crecimiento del ecosistema no elimina los riesgos — los transforma. Estos son los más relevantes en 2026.</p>
+
+    <div style="background:#fff;border:1px solid var(--sand);border-radius:10px;padding:8px 24px;">
+      <div class="risk-row">
+        <div class="risk-num">01</div>
+        <div class="risk-name">Riesgo de reservas (fiat-backed)</div>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:85%;background:#BF2A17;"></div></div>
+        <div class="risk-label" style="color:var(--red);">Alto</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">02</div>
+        <div class="risk-name">Riesgo regulatorio (cambio de marco)</div>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:75%;background:#F59E0B;"></div></div>
+        <div class="risk-label" style="color:#B45309;">Medio-alto</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">03</div>
+        <div class="risk-name">Riesgo de smart contract (DeFi)</div>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:70%;background:#F59E0B;"></div></div>
+        <div class="risk-label" style="color:#B45309;">Medio-alto</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">04</div>
+        <div class="risk-name">Riesgo de depeg (colapso de peg)</div>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:50%;background:#F59E0B;"></div></div>
+        <div class="risk-label" style="color:#B45309;">Medio</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">05</div>
+        <div class="risk-name">Riesgo de concentración (USDT/USDC)</div>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:40%;background:var(--forest);"></div></div>
+        <div class="risk-label" style="color:var(--forest);">Bajo-medio</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONCLUSIÓN -->
+  <div class="sec">
+    <div class="sec-num">06 · Conclusión</div>
+    <h2 class="sec-title">El ecosistema stablecoin<br>no para de crecer</h2>
+    <p class="sec-lead">Y la información sobre él sigue siendo fragmentada, técnica y difícil de acceder para quienes más la necesitan.</p>
+
+    <div class="callout">
+      <div class="callout-label">El problema que StableLens resuelve</div>
+      <div class="callout-text">Los datos están en DeFiLlama. El research en Messari. La regulación en 30 fuentes distintas. El directorio de empresas no existe. <em>StableLens lo centraliza todo en un solo lugar, diseñado para profesionales que no deberían perder tiempo buscando.</em></div>
+    </div>
+  </div>
+
+  <!-- CTA WAITLIST -->
+  <div class="cta-section" id="waitlist">
+    <div class="cta-title">Accede a StableLens gratis</div>
+    <p class="cta-sub">Dashboard en tiempo real, monitor de peg con alertas, directorio de 100+ empresas, tracker regulatorio y más — todo en un solo lugar. Gratis durante la beta.</p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" placeholder="tu@email.com"/>
+      <button class="cta-btn" onclick="handleCTA()">Solicitar acceso</button>
+    </div>
+    <div class="cta-note">Gratuito durante la beta · Sin tarjeta de crédito · stablelens.io</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="df-logo">
+      <div class="df-icon"><span class="df-s">S</span></div>
+      <span class="df-text">StableLens</span>
+    </div>
+    <div class="df-note">© 2026 StableLens · Light Paper v1.0 · Mayo 2026</div>
+  </div>
+
+</div>
+
+<script>
+function handleCTA(){
+  const i=document.querySelector('.cta-input'),b=document.querySelector('.cta-btn');
+  if(!i.value||!i.value.includes('@')){i.style.outline='2px solid rgba(255,255,255,.5)';setTimeout(()=>i.style.outline='',1800);return;}
+  b.textContent='✓ ¡Apuntado!';b.style.background='var(--forest)';b.style.color='#fff';
+  i.value='';i.disabled=true;b.disabled=true;
+}
+document.querySelector('.cta-input').addEventListener('keydown',e=>{if(e.key==='Enter')handleCTA();});
+</script>
+</body>
+</html>
