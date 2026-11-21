@@ -1,9 +1,20 @@
 # StableLens
 
-Plataforma para entender el ecosistema de stablecoins. Ver `CLAUDE.md` para el contexto completo y `docs/sprints.md` para el plan.
+Plataforma para entender el ecosistema de stablecoins. Ver `CLAUDE.md` para el contexto y `docs/sprints.md` para el plan.
 
-## Empezar
-1. `git init && git add . && git commit -m "Initial commit"`
-2. Crea un repo en GitHub y haz push.
-3. Abre la carpeta con Claude Code y ejecuta `/sprint S2`.
-4. Copia `.env.example` a `.env.local` y rellena las claves.
+## Desarrollo
+```bash
+npm install
+cp .env.example .env.local   # rellena las claves (ver docs/s2-setup.md)
+npm run dev                  # http://localhost:3000
+```
+
+Scripts: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`.
+
+## Estructura
+- `src/app` — rutas (App Router): `/login`, `/dashboard` (protegida), `/auth/*`, `/api/waitlist`.
+- `src/lib/supabase` — clientes de Supabase (navegador, servidor, admin, proxy de sesión).
+- `src/proxy.ts` — refresca la sesión y protege `/dashboard`.
+- `supabase/migrations` — esquema SQL y RLS.
+- `public/index.html` — landing estática, servida en `/` mediante un rewrite en `next.config.ts`.
+- `netlify.toml` — configuración de despliegue en Netlify.

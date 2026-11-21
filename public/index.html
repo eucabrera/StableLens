@@ -346,6 +346,7 @@ footer{border-top:1px solid var(--sand);padding:26px 48px;display:flex;align-ite
     <p class="s-sub">Join the waitlist and get beta access before the public launch. No spam — just a heads-up when the doors open.</p>
     <div class="wl-form">
       <input class="wl-input" type="email" placeholder="your@email.com"/>
+      <input class="wl-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none"/>
       <button class="wl-btn" onclick="handleWL()">Request Access</button>
     </div>
     <p class="wl-note">Free during beta · No credit card required</p>
@@ -356,7 +357,7 @@ footer{border-top:1px solid var(--sand);padding:26px 48px;display:flex;align-ite
         <div class="av" style="background:#1C1917;">R</div>
         <div class="av" style="background:#6B7280;">J</div>
       </div>
-      <span class="wl-cnt">+240 already on the waitlist</span>
+      <span class="wl-cnt">Be among the first to get access</span>
     </div>
   </div>
 </section>
@@ -377,12 +378,25 @@ footer{border-top:1px solid var(--sand);padding:26px 48px;display:flex;align-ite
 </footer>
 
 <script>
-function handleWL(){
-  const i=document.querySelector('.wl-input'),b=document.querySelector('.wl-btn');
-  if(!i.value||!i.value.includes('@')){i.style.outline='2px solid var(--red)';i.focus();setTimeout(()=>i.style.outline='',1800);return;}
-  b.textContent='✓ You\'re on the list!';b.style.background='var(--forest)';
-  i.value='';i.disabled=true;b.disabled=true;
+// Waitlist endpoint of the Next.js app. Relative path works when the app serves this page;
+// if the landing stays on its own host, set the absolute app URL here (and add the landing
+// origin to WAITLIST_ALLOWED_ORIGINS in the app).
+const WL_API='/api/waitlist';
+async function handleWL(){
+  const i=document.querySelector('.wl-input'),b=document.querySelector('.wl-btn'),hp=document.querySelector('.wl-hp');
+  const flag=()=>{i.style.outline='2px solid var(--red)';i.focus();setTimeout(()=>i.style.outline='',1800);};
+  if(!i.value||!i.value.includes('@')){flag();return;}
+  const label=b.textContent;b.disabled=true;b.textContent='Sending…';
+  try{
+    const r=await fetch(WL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:i.value,source:'landing',website:hp?hp.value:''})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){b.disabled=false;b.textContent=label;flag();if(d.error!=='invalid_email')alert('Something went wrong. Please try again.');return;}
+    b.textContent=d.already?'✓ Already on the list':'✓ You\'re on the list!';b.style.background='var(--forest)';
+    i.value='';i.disabled=true;
+  }catch(e){b.disabled=false;b.textContent=label;alert('Network error. Please try again.');}
 }
+// Show the real waitlist size once the API reports one (hidden below a minimum).
+fetch(WL_API).then(r=>r.json()).then(d=>{if(d&&typeof d.count==='number'){document.querySelector('.wl-cnt').textContent='+'+d.count+' already on the waitlist';}}).catch(()=>{});
 document.querySelector('.wl-input').addEventListener('keydown',e=>{if(e.key==='Enter')handleWL();});
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}}),{threshold:.08});
 document.querySelectorAll('.feat,.aud-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity .5s ease,transform .5s ease';obs.observe(el);});

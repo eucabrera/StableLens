@@ -12,7 +12,7 @@ Owner: Eu Cabrera (no desarrollador; Claude escribe el código). Idioma de traba
 - Chart.js (gráficas)
 - Datos: CoinGecko, DefiLlama (yields: Aave, Compound, Curve)
 - Stripe (más adelante, S11)
-- Hosting: landing en Netlify (stablelens.netlify.app). App: Netlify o Vercel — DECISIÓN ABIERTA.
+- Hosting: Netlify (decidido en S2). La app Next.js y la landing se sirven desde el mismo sitio (stablelens.netlify.app): `/` reescribe a `public/index.html`. Config en `netlify.toml`.
 
 ## Marca
 - Colores: bermellón `#BF2A17` (claro `#FDECEA`, oscuro `#8C1A0C`), crema `#FDFAF5`, carbón `#1C1917`, bosque `#1B4332` (claro `#D1FAE5`), arena `#EDE8DE` / `#D6CEBC`, gris `#6B7280`.
