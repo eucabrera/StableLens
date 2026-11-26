@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip the homepage, static assets, the static landing and the public waitlist API.
-    "/((?!$|_next/static|_next/image|favicon.ico|index.html|api/waitlist|.*\\.(?:svg|png|jpg|jpeg|gif|webp|pdf)$).*)",
+    // Skip the homepage, static assets, the static landing and the public APIs (waitlist, cron).
+    "/((?!$|_next/static|_next/image|favicon.ico|index.html|api/waitlist|api/cron|.*\\.(?:svg|png|jpg|jpeg|gif|webp|pdf)$).*)",
   ],
 };

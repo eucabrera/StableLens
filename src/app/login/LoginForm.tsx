@@ -24,7 +24,7 @@ export function LoginForm() {
   }
 
   if (status === "sent") {
-    return <p className="rounded-md bg-forest-light px-4 py-3 text-sm text-forest">Check your inbox for a sign-in link.</p>;
+    return <p className="rounded-md bg-good-soft px-4 py-3 text-sm text-good">Check your inbox for a sign-in link.</p>;
   }
 
   return (
@@ -36,16 +36,16 @@ export function LoginForm() {
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="rounded-md border border-sand-dark bg-white px-3 py-2 text-sm outline-none focus:border-red"
+        className="rounded-md border border-line-strong bg-surface px-3 py-2 text-sm outline-none focus:border-accent"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-md bg-red px-4 py-2 text-sm font-medium text-white hover:opacity-85 disabled:opacity-60"
+        className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-85 disabled:opacity-60"
       >
         {status === "loading" ? "Sending…" : "Send magic link"}
       </button>
-      {status === "error" && <p className="text-sm text-red">Couldn&apos;t sign you in. Try again.</p>}
+      {status === "error" && <p className="text-sm text-accent-text">Couldn&apos;t sign you in. Try again.</p>}
     </form>
   );
 }

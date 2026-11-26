@@ -1,6 +1,45 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Semantic tokens. Light is the default; dark is selected by data-theme="dark"
+   on <html> (set before paint by the script in layout.tsx). */
+:root {
+  color-scheme: light;
+  --bg: #fdfaf5;
+  --surface: #ffffff;
+  --surface-2: #f6f2ea;
+  --fg: #1c1917;
+  --muted: #6b7280;
+  --line: #ede8de;
+  --line-strong: #d6cebc;
+  --accent: #bf2a17;
+  --accent-text: #bf2a17;
+  --accent-soft: #fdecea;
+  --good: #1b4332;
+  --good-soft: #d1fae5;
+  --chart: #bf2a17;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #171513;
+  --surface: #211e1b;
+  --surface-2: #2a2623;
+  --fg: #f5f1ea;
+  --muted: #a39e96;
+  --line: #2f2b27;
+  --line-strong: #46403a;
+  --accent: #bf2a17;
+  --accent-text: #f0806d;
+  --accent-soft: #3a1d18;
+  --good: #7ddbb0;
+  --good-soft: #15342a;
+  --chart: #e5533f;
+}
+
 @theme inline {
+  /* Brand palette (fixed). */
   --color-red: #bf2a17;
   --color-red-light: #fdecea;
   --color-red-dark: #8c1a0c;
@@ -10,12 +49,26 @@
   --color-forest-light: #d1fae5;
   --color-sand: #ede8de;
   --color-sand-dark: #d6cebc;
-  --color-muted: #6b7280;
+
+  /* Theme-aware roles. */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+
   --font-sans: var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: var(--font-dm-mono), ui-monospace, monospace;
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-carbon);
+  background: var(--bg);
+  color: var(--fg);
 }
